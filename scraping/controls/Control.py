@@ -16,19 +16,25 @@ def get_results(url:str,tags,*,methods = "or"):
     res = requests.get(url)
     soup = bs(res.text,"html.parser")
 
-    all_text = soup.get_text().split(" ")
+    all_ = soup.find_all("p")
+    all_text = soup.get_text().split("\n")
 
     itemlist = {}
 
-    for text in all_text:
+    if type(tags) == list:
         for tag in tags:
-            m = re.match(tag,text)
-            try:
-                item = m.groups()
-                if not len(item)==0:
-                    itemlist[text]= item
-            except AttributeError:
-                continue
+            itemlist[tag] = []
+            for text in all_text:
+                m = re.search(re.escape(tag),text)
+                if m != None:
+                    itemlist[tag].append(text)
+    elif type(tags) == str:
+        itemlist[tags] = []
+        for text in all_text:
+            print(text)
+            m = re.search(re.escape(tags),text)
+            if m != None:
+                itemlist[tags].append(text)
 
     return itemlist
 
