@@ -6,8 +6,6 @@ from controls import Control
 
 import hashlib
 import datetime
-import json
-import re
 
 router = APIRouter()
 
