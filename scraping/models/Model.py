@@ -22,6 +22,7 @@ class Activity(Base):
     id = Column(Integer, primary_key=True, index=True)
     userid = Column(Integer)
     timestamp = Column(DateTime)
+    action = Column(String)
     items = Column(String)
     __tablename__ = "activities"
 

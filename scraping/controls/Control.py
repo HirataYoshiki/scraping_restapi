@@ -18,13 +18,16 @@ def get_results(url:str,*tags,methods = "or"):
 
     all_text = soup.get_text().split(" ")
 
-    
+    itemlist = {}
 
     for text in all_text:
         for tag in tags:
             m = re.match(tag,text)
             item = m.groups()
+            if not len(item)==0:
+                itemlist[text]= item
 
+    return itemlist
 
 
 
