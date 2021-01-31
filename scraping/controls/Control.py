@@ -1,6 +1,9 @@
 from bs4 import BeautifulSoup as bs
 import requests
 
+import re
+
+
 def get_results(url:str,*tags,methods = "or"):
     if url = "" or tags = "":
         if url = "":
@@ -12,6 +15,19 @@ def get_results(url:str,*tags,methods = "or"):
     
     res = requests.get(url)
     soup = bs(res.text,"html.parser")
+
+    all_text = soup.get_text().split(" ")
+
+    
+
+    for text in all_text:
+        for tag in tags:
+            m = re.match(tag,text)
+            item = m.groups()
+
+
+
+
 
 
 
