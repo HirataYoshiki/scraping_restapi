@@ -6,6 +6,8 @@ from controls import Control
 
 import hashlib
 import datetime
+import json
+import re
 
 router = APIRouter()
 
@@ -90,12 +92,16 @@ class RoutersActivity:
     def post_activity(activities:Scheme.Activity):
         url = activities.url
         tags = activities.tags
-        action = f"searched url is {url} . The tags are {tags} ."
+        action = {
+            "url":url,
+            "tags":tags
+            }
+        
         items = Control.get_results(url,tags)
         adds = Model.Activity(
             userid = 111,
             timestamp = datetime.datetime.now(),
-            action = action,
+            action = str(action),
             items = str(items)
         )
         Model.SessionLocal.add(adds)
@@ -107,9 +113,10 @@ class RoutersActivity:
             "result":items
             }
 
-        
-    
+    @router.get('/activities')
+    def get_all_activities():
+        query = Model.SessionLocal.query(Model.Activity).all()
+        return {
+            "result":query
+        }
 
-
-if __name__ =="__main__":
-    print('test_router')
