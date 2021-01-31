@@ -5,6 +5,7 @@ from models import Model
 from controls import Control
 
 import hashlib
+import datetime
 
 router = APIRouter()
 
@@ -86,8 +87,27 @@ class RouterUsers:
 
 class RoutersActivity:
     @router.post('/activities')
-    def post_activity():
-        pass
+    def post_activity(activities:Scheme.Activity):
+        url = activities.url
+        tags = activities.tags
+        action = f"searched url is {url} . The tags are {tags} ."
+        items = Control.get_results(url,tags)
+        adds = Model.Activity(
+            userid = 111,
+            timestamp = datetime.datetime.now(),
+            action = action,
+            items = str(items)
+        )
+        Model.SessionLocal.add(adds)
+        Model.SessionLocal.commit()
+
+        return {
+            "url":url,
+            "tags":tags,
+            "result":items
+            }
+
+        
     
 
 

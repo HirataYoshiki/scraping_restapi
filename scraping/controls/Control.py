@@ -4,11 +4,11 @@ import requests
 import re
 
 
-def get_results(url:str,*tags,methods = "or"):
-    if url = "" or tags = "":
-        if url = "":
+def get_results(url:str,tags,*,methods = "or"):
+    if url == "" or tags == "":
+        if url == "":
             text = "please enter the url.\n"
-        if tag = "":
+        if tags == []:
             text_2 = "please enter the tags."    
             text += text_2
         return text
@@ -23,9 +23,12 @@ def get_results(url:str,*tags,methods = "or"):
     for text in all_text:
         for tag in tags:
             m = re.match(tag,text)
-            item = m.groups()
-            if not len(item)==0:
-                itemlist[text]= item
+            try:
+                item = m.groups()
+                if not len(item)==0:
+                    itemlist[text]= item
+            except AttributeError:
+                continue
 
     return itemlist
 
