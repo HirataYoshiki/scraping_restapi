@@ -63,6 +63,13 @@ async def update_user(userid:int,user:Scheme.User):
         updates.premium = True
 
     Model.SessionLocal.commit()
+
+@router.delete('/users/{userid}')
+def delete_user(userid:int):
+    delete = Model.SessionLocal.query(Model.User).filter(Model.User.userid== userid).first().delete()
+    Model.SessionLocal.commit()
+    return {"result":{"delete id":userid}}
+
     
 
 
