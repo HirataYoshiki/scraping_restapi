@@ -4,7 +4,7 @@ from typing import List
 
 class Activity(BaseModel):
     url:str = "Enter the Target URL"
-    tags:List[str]　= [""]
+    tags:List[str] = [""]
 
 class User(BaseModel):
     username: str = "Enter Your Name"

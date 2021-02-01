@@ -42,7 +42,7 @@ class Test_scraping:
     def _match_tag_alltext(soup,SearchTags:list,HtmlTags:list) -> dict:
         Number = 3
 
-        result = {}
+        itemlist = {}
         for htmltag in HtmlTags:
             minisoup = soup.findAll(htmltag)
             for minimumsoup in minisoup:
@@ -61,7 +61,7 @@ class Test_scraping:
                 except:
                     continue
 
-        return result
+        return itemlist
 
 
 
