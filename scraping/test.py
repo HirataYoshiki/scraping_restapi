@@ -8,15 +8,10 @@ TAG = ["タグ","要素"]
 
 class Test_scraping:
     @classmethod
-    def get_results(cls,url:str,tags,*,methods = "or"):
-        if url == "" or tags == "":
-            if url == "":
-                text = "please enter the url.\n"
-            if tags == []:
-                text_2 = "please enter the tags."    
-                text += text_2
-            return text
-        
+    def get_results(cls,url:str,tags,*,methods = "or"):     
+        if not cls._check_tag_url(url,tags):  
+            return "url or tag is invalid."
+
         res = requests.get(url)
         soup = bs(res.text,"html.parser")
 
@@ -26,29 +21,32 @@ class Test_scraping:
 
         if type(tags) == list:
             for tag in tags:
-                itemlist[tag] = cls.match_tag_alltext(tag,all_text)
+                itemlist[tag] = cls._match_tag_alltext(tag,all_text)
         elif type(tags) == str:
-            itemlist[tags] = cls.match_tag_alltext(tag,all_text)
+            itemlist[tags] = cls._match_tag_alltext(tag,all_text)
             
-
         return itemlist
 
-    def get_all_tag(url) ->list:
-        res = requests.get(url)
-        soup = bs(res.text,"html.parser")
+    def _check_tag_url(url,tag) -> bool:
+        if url == "" or tags == "":
+            return False
+        else:
+            return True
+
+    def _get_all_tag(soup) -> list:
         alltags = soup.findAll(True) 
         tagslist_raw = [tag.name for tag in alltags]
         tagslist = list(dict.fromkeys(tagslist_raw))
         return tagslist
 
-    def match_tag_alltext(tag,all_text) ->list:
+    def _match_tag_alltext(tag,all_text) -> list:
         result = []
         for text in all_text:
             m = re.search(re.escape(tag),text)
             if m != None:
                 result.append(text)
         return result
-
+    
 
 if __name__ == "__main__":
     print(Test_scraping.get_results(URL,TAG))

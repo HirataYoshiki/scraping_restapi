@@ -15,18 +15,18 @@ async def api_schemas():
         '/':{'get':'api_schemas',
             '/users':{
                 'get':"get all data about users",
-                'post':"",
+                'post':"register new user with username,password",
                 'put':"",
                 '/{userid}':{
-                    "get":"",
-                    "put":"",
-                    'delete':""
+                    "get":"get info about the user",
+                    "put":"change info about the user",
+                    'delete':"delete the user"
                 }
             },
             '/activities':{
-                'get':"",
+                'get':"get all info about activities",
                 '/{activityid}':{
-                    'get':"",
+                    'get':"get info about the activity",
                     'delete':""
                 }
             }
@@ -61,7 +61,9 @@ class RouterUsers:
     async def get_user(
         userid:int):
         result = Model.SessionLocal.query(Model.User).filter(Model.User.userid == userid).one()
-        return {"items":result}
+        return {
+            "items":result
+            }
 
     @router.put('/users/{userid}')
     async def update_user(
