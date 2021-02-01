@@ -8,44 +8,45 @@ TAG = ["タグ","要素"]
 
 class Test_scraping:
     @classmethod
-    def get_results(cls,url:str,tags,*,methods = "or"):     
+    def get_results(cls,url:str,tags:list,*,methods = "or"):     
+        itemlist = {}
+
         if not cls._check_tag_url(url,tags):  
             return "url or tag is invalid."
 
         res = requests.get(url)
         soup = bs(res.text,"html.parser")
+        htmltags = cls._get_html_tags(soup)
 
-        all_text = soup.get_text().split("\n")
 
-        itemlist = {}
 
-        if type(tags) == list:
-            for tag in tags:
-                itemlist[tag] = cls._match_tag_alltext(tag,all_text)
-        elif type(tags) == str:
-            itemlist[tags] = cls._match_tag_alltext(tag,all_text)
-            
         return itemlist
 
     def _check_tag_url(url,tag) -> bool:
+        Number = 1
+
         if url == "" or tags == "":
             return False
         else:
             return True
 
-    def _get_all_tag(soup) -> list:
+    def _get_html_tags(soup) -> list:
+        Number = 2
+
         alltags = soup.findAll(True) 
         tagslist_raw = [tag.name for tag in alltags]
         tagslist = list(dict.fromkeys(tagslist_raw))
         return tagslist
 
-    def _match_tag_alltext(tag,all_text) -> list:
-        result = []
-        for text in all_text:
-            m = re.search(re.escape(tag),text)
-            if m != None:
-                result.append(text)
-        return result
+    def _match_tag_alltext(soup,SearchTags:list,HtmlTags:list) -> dict:
+        Number = 3
+
+        result = {}
+        for search in SearchTags:
+            for 
+
+
+        
     
 
 if __name__ == "__main__":
