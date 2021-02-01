@@ -95,7 +95,7 @@ class RoutersActivity:
             "tags":tags
             }
         
-        items = Control.get_results(url,tags)
+        items = Control.Scraping.get_results(url,tags)
         adds = Model.Activity(
             userid = 111,
             timestamp = datetime.datetime.now(),

@@ -3,7 +3,10 @@ import requests
 
 import re
 
-class Scraping:
+URL = "https://tdoc.info/beautifulsoup/#navigating-the-parse-tree"
+TAG = ["タグ","要素"]
+
+class Test_scraping:
     @classmethod
     def get_results(cls,url:str,tags,*,methods = "or"):
         if url == "" or tags == "":
@@ -17,20 +20,20 @@ class Scraping:
         res = requests.get(url)
         soup = bs(res.text,"html.parser")
 
-        all_ = soup.find_all("li")
         all_text = soup.get_text().split("\n")
 
         itemlist = {}
 
         if type(tags) == list:
             for tag in tags:
-                itemlist[tag] = cls._match_tag_alltext(tag,all_text)
+                itemlist[tag] = cls.match_tag_alltext(tag,all_text)
         elif type(tags) == str:
-            itemlist[tags] = cls._match_tag_alltext(tag,all_text)
+            itemlist[tags] = cls.match_tag_alltext(tag,all_text)
+            
 
         return itemlist
 
-    def _get_all_tag(url) ->list:
+    def get_all_tag(url) ->list:
         res = requests.get(url)
         soup = bs(res.text,"html.parser")
         alltags = soup.findAll(True) 
@@ -38,7 +41,7 @@ class Scraping:
         tagslist = list(dict.fromkeys(tagslist_raw))
         return tagslist
 
-    def _match_tag_alltext(tag,all_text) ->list:
+    def match_tag_alltext(tag,all_text) ->list:
         result = []
         for text in all_text:
             m = re.search(re.escape(tag),text)
@@ -47,10 +50,5 @@ class Scraping:
         return result
 
 
-
-
-
-
-
-
-
+if __name__ == "__main__":
+    print(Test_scraping.get_results(URL,TAG))
