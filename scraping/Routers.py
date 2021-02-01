@@ -1,3 +1,4 @@
+#ルーターに対するレスポンスに関するファイル
 from fastapi import APIRouter
 
 from schemes import Scheme

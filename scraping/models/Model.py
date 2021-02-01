@@ -1,3 +1,4 @@
+#データベース設計とその操作に関するファイル
 import os
 import sqlalchemy
 from sqlalchemy import Boolean, Column, Integer, String, DateTime
