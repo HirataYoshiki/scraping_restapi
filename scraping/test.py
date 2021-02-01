@@ -3,26 +3,25 @@ import requests
 
 import re
 
-URL = "https://tdoc.info/beautifulsoup/#navigating-the-parse-tree"
-TAG = ["タグ","要素"]
+URL = "https://tdoc.info/beautifulsoup/#iterating-over-a-tag"
+TAG = ["Python","キーワード","時間"]
 
 class Test_scraping:
     @classmethod
     def get_results(cls,url:str,tags:list,*,methods = "or"):     
-        itemlist = {}
 
         if not cls._check_tag_url(url,tags):  
             return "url or tag is invalid."
 
         res = requests.get(url)
-        soup = bs(res.text,"html.parser")
+        res.encoding = res.apparent_encoding
+        soup = bs(res.text,'html.parser')
         htmltags = cls._get_html_tags(soup)
-
-
-
+        itemlist = cls._match_tag_alltext(soup,tags,htmltags)
         return itemlist
 
-    def _check_tag_url(url,tag) -> bool:
+
+    def _check_tag_url(url,tags) -> bool:
         Number = 1
 
         if url == "" or tags == "":
@@ -33,8 +32,10 @@ class Test_scraping:
     def _get_html_tags(soup) -> list:
         Number = 2
 
+        extractlist = ["p"]
+
         alltags = soup.findAll(True) 
-        tagslist_raw = [tag.name for tag in alltags]
+        tagslist_raw = [tag.name for tag in alltags if tag.name in extractlist]
         tagslist = list(dict.fromkeys(tagslist_raw))
         return tagslist
 
@@ -42,12 +43,30 @@ class Test_scraping:
         Number = 3
 
         result = {}
-        for search in SearchTags:
-            for 
+        for htmltag in HtmlTags:
+            minisoup = soup.findAll(htmltag)
+            for minimumsoup in minisoup:
+                try:
+                    for searchtag in SearchTags:
+                        text = minimumsoup.text
+                        m = re.search(searchtag,text)
+                        if m !=None:
+                            if result.get(searchtag,False):
+                                if result[searchtag].get(htmltag,False):
+                                    result[searchtag][htmltag].append(text)
+                                else:
+                                    result[searchtag][htmltag] = [text]
+                            else:
+                                result[searchtag] = {htmltag:[text]}
+                except:
+                    continue
+
+        return result
+
 
 
         
     
 
 if __name__ == "__main__":
-    print(Test_scraping.get_results(URL,TAG))
+    Test_scraping.get_results(URL,TAG)
