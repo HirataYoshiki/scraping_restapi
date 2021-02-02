@@ -64,39 +64,42 @@ class RouterUsers:
             }
 
     @router.get('/users/{userid}')
-    def get_user(
+    async def get_user(
         userid:int):
-        result = Model.SessionLocal.query(Model.User).filter(Model.User.userid == userid).one()
+        session = Model.get_session()
+        result = session.query(Model.User).filter(Model.User.userid == userid).one()
         return {
             "items":result
             }
 
     @router.put('/users/{userid}')
-    def update_user(
+    async def update_user(
         userid:int,
         user:Scheme.User):
-        updates = Model.SessionLocal.query(Model.User).filter(Model.User.userid==userid).one()
+        session = Model.get_session()
+        updates = session.query(Model.User).filter(Model.User.userid==userid).one()
         if user.username:
             updates.name = user.username
         if user.premium:
             updates.premium = True
 
         try:
-            Model.SessionLocal.commit()
+            session.commit()
         except:
-            Model.SessionLocal.rollback()
+            session.rollback()
             print("ロールバック")
         return {
             "item":updates}
 
     @router.delete('/users/{userid}')
-    def delete_user(userid:int):
-        delete = Model.SessionLocal.query(Model.User).filter(Model.User.userid== userid).one()
-        Model.SessionLocal.delete(delete)
+    async def delete_user(userid:int):
+        session = Model.get_session()
+        delete = session.query(Model.User).filter(Model.User.userid== userid).one()
+        session.delete(delete)
         try:
-            Model.SessionLocal.commit()
+            session.commit()
         except:
-            Model.SessionLocal.rollback()
+            session.rollback()
             print("ロールバック")
         return {
             "result":{
@@ -106,7 +109,8 @@ class RouterUsers:
 
 class RoutersActivity:
     @router.post('/activities')
-    def post_activity(activities:Scheme.Activity):
+    async def post_activity(activities:Scheme.Activity):
+        session = Model.get_session()
         url = activities.url
         tags = activities.tags
         action = {
@@ -121,11 +125,11 @@ class RoutersActivity:
             action = str(action),
             items = str(items)
         )
-        Model.SessionLocal.add(adds)
+        session.add(adds)
         try:
-            Model.SessionLocal.commit()
+            session.commit()
         except:
-            Model.SessionLocal.rollback()
+            session.rollback()
             print("ロールバック")
         return {
             "url":url,
@@ -134,8 +138,9 @@ class RoutersActivity:
             }
 
     @router.get('/activities')
-    def get_all_activities():
-        query = Model.SessionLocal.query(Model.Activity).all()
+    async def get_all_activities():
+        session = Model.get_session()
+        query = session.query(Model.Activity).all()
         return {
             "result":query
         }

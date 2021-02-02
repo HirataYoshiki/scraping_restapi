@@ -22,7 +22,6 @@ def get_session():
         return SessionLocal
     finally:
         SessionLocal.close()
-SessionLocal = Session()
 
 Base = declarative_base()
 
