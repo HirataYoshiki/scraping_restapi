@@ -1,2 +1,7 @@
+#[General]
+#   python cache file adn directory
 *.pyc
 __pycache__
+#[Development]
+#   bat file to boost 
+.bat

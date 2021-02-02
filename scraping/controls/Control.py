@@ -6,7 +6,7 @@ import re
 
 class Scraping:
     @classmethod
-    def get_results(cls,url:str,tags:list,*,methods = "or"):     
+    def get_results(cls,url:str,tags:list):     
 
         if not cls._check_tag_url(url,tags):  
             return "url or tag is invalid."
