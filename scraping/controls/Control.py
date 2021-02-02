@@ -5,6 +5,22 @@ import requests
 import re
 
 class Scraping:
+    # Scraping.get_result(url,tags) is the entry point for scraping.
+    # the flow is below...(it is written like example)
+    # example description : [func.__name__]
+
+    # [Flow]
+    # 1. Ckeck if url and tags are not "". [_check_tag_url(url,tags)]
+    #       bool:True  -> continue
+    #       bool:False -> exit
+    # 2. make request and get html. [requests.get(url)]
+    # 3. make valid encoding. [res.encoding = res.apparent_encoding]
+    # 4. make soup.[BeautifulSoup(body,parser)]
+    # 5. get target tag if that exists in the html. [_get_html_tags(soup)]
+    #       the target tag is hard coded -> extractlist = ["p"]
+    # 6. get result(dict). [_match_tag_alltext(soup,tags,htmltags)]     
+    #       result = {"tag":{"htmltag.name":[text1,text2,...]}} 
+
     @classmethod
     def get_results(cls,url:str,tags:list):     
 

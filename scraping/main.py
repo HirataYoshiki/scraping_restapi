@@ -2,6 +2,7 @@ from fastapi import FastAPI
 import uvicorn
 from models.Model import SessionLocal 
 
+
 import Routers 
 
 app = FastAPI()
