@@ -46,7 +46,7 @@ class Scraping:
     def _get_html_tags(soup) -> list:
         Number = 2
 
-        extractlist = ["p"]
+        extractlist = ["p","a","li"]
 
         alltags = soup.findAll(True) 
         tagslist_raw = [tag.name for tag in alltags if tag.name in extractlist]

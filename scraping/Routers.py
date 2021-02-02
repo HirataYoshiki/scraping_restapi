@@ -51,9 +51,13 @@ class RouterUsers:
             password = password
             )
         Model.SessionLocal.add(adds)
-        Model.SessionLocal.commit()
+        try:
+            Model.SessionLocal.commit()
+        except:
+            Model.SessionLocal.rollback()
+            print("ロールバック")
 
-        return await {
+        return {
             "items":Model.SessionLocal.query(Model.User).filter(Model.User.name == name).all(),
             "condition":True
             }
@@ -62,7 +66,7 @@ class RouterUsers:
     async def get_user(
         userid:int):
         result = Model.SessionLocal.query(Model.User).filter(Model.User.userid == userid).one()
-        return await {
+        return {
             "items":result
             }
 
@@ -76,14 +80,22 @@ class RouterUsers:
         if user.premium:
             updates.premium = True
 
-        await Model.SessionLocal.commit()
+        try:
+            Model.SessionLocal.commit()
+        except:
+            Model.SessionLocal.rollback()
+            print("ロールバック")
         return {
             "item":updates}
 
     @router.delete('/users/{userid}')
     async def delete_user(userid:int):
         delete = Model.SessionLocal.query(Model.User).filter(Model.User.userid== userid).first().delete()
-        await Model.SessionLocal.commit()
+        try:
+            Model.SessionLocal.commit()
+        except:
+            Model.SessionLocal.rollback()
+            print("ロールバック")
         return {
             "result":{
                 "delete id":userid
@@ -108,8 +120,11 @@ class RoutersActivity:
             items = str(items)
         )
         Model.SessionLocal.add(adds)
-        await Model.SessionLocal.commit()
-
+        try:
+            Model.SessionLocal.commit()
+        except:
+            Model.SessionLocal.rollback()
+            print("ロールバック")
         return {
             "url":url,
             "tags":tags,
