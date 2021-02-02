@@ -15,6 +15,13 @@ Session = sessionmaker(
         autoflush = False,
         bind = engine
     )
+
+def get_session():
+    try:
+        SessionLocal = Session() # sessionを生成
+        return SessionLocal
+    finally:
+        SessionLocal.close()
 SessionLocal = Session()
 
 Base = declarative_base()

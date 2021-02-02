@@ -37,33 +37,34 @@ def api_schemas():
 
 class RouterUsers:
     @router.get('/users')
-    def get_all_users():
-        query = Model.SessionLocal.query(Model.User).all()
+    async def get_all_users():
+        session = Model.get_session()
+        query = session.query(Model.User).all()
         return query
 
     @router.post('/users')
-    async def add_new_user(
-        user:Scheme.User):
+    async def add_new_user(user:Scheme.User):
+        session = Model.get_session()
         name = user.username
         password = hashlib.sha256(user.password.encode()).hexdigest()
         adds = Model.User(
             name = name,
             password = password
             )
-        Model.SessionLocal.add(adds)
+        session.add(adds)
         try:
-            Model.SessionLocal.commit()
+            session.commit()
         except:
-            Model.SessionLocal.rollback()
+            session.rollback()
             print("ロールバック")
 
         return {
-            "items":Model.SessionLocal.query(Model.User).filter(Model.User.name == name).all(),
+            "items":session.query(Model.User).filter(Model.User.name == name).all(),
             "condition":True
             }
 
     @router.get('/users/{userid}')
-    async def get_user(
+    def get_user(
         userid:int):
         result = Model.SessionLocal.query(Model.User).filter(Model.User.userid == userid).one()
         return {
@@ -71,10 +72,10 @@ class RouterUsers:
             }
 
     @router.put('/users/{userid}')
-    async def update_user(
+    def update_user(
         userid:int,
         user:Scheme.User):
-        updates = Model.SessionLocal.query(Model.User).filter(Model.User.userid==userid).first()
+        updates = Model.SessionLocal.query(Model.User).filter(Model.User.userid==userid).one()
         if user.username:
             updates.name = user.username
         if user.premium:
@@ -89,8 +90,9 @@ class RouterUsers:
             "item":updates}
 
     @router.delete('/users/{userid}')
-    async def delete_user(userid:int):
-        delete = Model.SessionLocal.query(Model.User).filter(Model.User.userid== userid).first().delete()
+    def delete_user(userid:int):
+        delete = Model.SessionLocal.query(Model.User).filter(Model.User.userid== userid).one()
+        Model.SessionLocal.delete(delete)
         try:
             Model.SessionLocal.commit()
         except:
@@ -104,7 +106,7 @@ class RouterUsers:
 
 class RoutersActivity:
     @router.post('/activities')
-    async def post_activity(activities:Scheme.Activity):
+    def post_activity(activities:Scheme.Activity):
         url = activities.url
         tags = activities.tags
         action = {

@@ -2,7 +2,6 @@ from fastapi import FastAPI
 import uvicorn
 from models.Model import engine
 
-
 import Routers 
 
 app = FastAPI()
