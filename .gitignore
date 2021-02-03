@@ -7,3 +7,5 @@ __pycache__
 *.bat
 #   just simplify my brain. put pictures generated in draw.io
 overall
+# vertial environment
+.venv
