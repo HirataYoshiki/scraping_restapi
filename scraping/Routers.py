@@ -145,3 +145,21 @@ class RoutersActivity:
             "result":query
         }
 
+    @router.delete('/activities/{activityid}')
+    def delete_activity(activityid:int):
+        session = Model.get_session()
+        deletes = session.query(Model.Activity).filter(Model.Activity.id == activityid).one()
+        session.delete(deletes)
+        try:
+            session.commit()
+        except:
+            session.rollback()
+            print("ロールバック")
+        return {
+            "result":{
+                "delete id":activityid
+                }
+            }
+
+
+
