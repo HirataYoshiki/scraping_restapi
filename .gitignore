@@ -9,3 +9,5 @@ __pycache__
 overall
 # vertial environment
 .venv
+# VSCode configs
+.vscode 
