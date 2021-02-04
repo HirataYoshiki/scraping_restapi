@@ -3,12 +3,12 @@ import requests
 
 import re
 
-URL = "https://tdoc.info/beautifulsoup/#iterating-over-a-tag"
-TAG = ["Python","キーワード","時間"]
+URL = "https://qiita.com/infratoweb/items/5021a36f69f26dc7f0b9"
+TAG = ["push"]
 
 class Test_scraping:
     @classmethod
-    def get_results(cls,url:str,tags:list,*,methods = "or"):     
+    def get_results(cls,url:str,tags:list):     
 
         if not cls._check_tag_url(url,tags):  
             return "url or tag is invalid."
@@ -32,7 +32,7 @@ class Test_scraping:
     def _get_html_tags(soup) -> list:
         Number = 2
 
-        extractlist = ["p"]
+        extractlist = ["p","a","li"]
 
         alltags = soup.findAll(True) 
         tagslist_raw = [tag.name for tag in alltags if tag.name in extractlist]
@@ -42,7 +42,7 @@ class Test_scraping:
     def _match_tag_alltext(soup,SearchTags:list,HtmlTags:list) -> dict:
         Number = 3
 
-        itemlist = {}
+        result = {}
         for htmltag in HtmlTags:
             minisoup = soup.findAll(htmltag)
             for minimumsoup in minisoup:
@@ -61,12 +61,9 @@ class Test_scraping:
                 except:
                     continue
 
-        return itemlist
+        return result
 
-
-
-        
-    
 
 if __name__ == "__main__":
-    Test_scraping.get_results(URL,TAG)
+    result = Test_scraping.get_results(URL,TAG)
+    print(result)
