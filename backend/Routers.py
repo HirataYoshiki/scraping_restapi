@@ -1,5 +1,8 @@
 #ルーターに対するレスポンスに関するファイル
-from fastapi import APIRouter
+from fastapi import APIRouter,Request 
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
 
 from schemes import Scheme
 from models import Model
@@ -9,9 +12,11 @@ import hashlib
 import datetime
 
 router = APIRouter()
+templates = Jinja2Templates(directory="../frontend/templates")
 
-@router.get('/')
-def api_schemas():
+@router.get('/',response_class=HTMLResponse)
+async def api_schemas(request:Request):
+    """
     result = {
         '/':{'get':'api_schemas',
             '/users':{
@@ -33,7 +38,13 @@ def api_schemas():
             }
         }
     }
-    return result
+    return result"""
+    return templates.TemplateResponse("index.html",{"request":request,"text":"hi"})
+
+@router.get('/test',response_class=HTMLResponse)
+async def api_schemas(request:Request):
+    return templates.TemplateResponse("index.html",{"request":request,"text":"ya"})
+
 
 class RouterUsers:
     @router.get('/users')

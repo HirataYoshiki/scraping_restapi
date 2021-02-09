@@ -1,12 +1,15 @@
 from fastapi import FastAPI
 import uvicorn
-from models.Model import engine
 
+from models.Model import engine
 import Routers 
+
 
 app = FastAPI()
 
 app.include_router(Routers.router)
+
+
 
 @app.on_event("startup")
 async def startup():

@@ -10,9 +10,11 @@ fastapi = "*"
 uvicorn = "*"
 pydantic = "*"
 requests = "*"
+jinja2 = "*"
+aiofiles = "*"
 
 [dev-packages]
 coverage = "*"
 
 [requires]
-python_version = "3.9"
+python_version = "3.8"
