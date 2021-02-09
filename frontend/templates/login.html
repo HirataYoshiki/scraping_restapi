@@ -4,40 +4,33 @@
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title id = "app2">[[title]]</title>
+      <title id = title>[[title]]</title>
 </head>
 <body>
-      <div id = "app">
+      <div id = app>
             [[message]]
-            <br>
             [[text]]
-            <br>
-            <p>from fastapi</p>
             {{text}}
-            <a class = "navbar-brand" href = "/">For first</a>
-            <a class = "navbar-brand" href = "/login">For test</a>
       </div>
-      
 </body>
-
-
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
 <script>
+      var header = new Vue({
+            delimiters:['[[',']]'],
+            el:"title",
+            data:{
+                  title:"login"
+            }
+      })
       var app = new Vue({
             delimiters:['[[',']]'],
             el:"#app",
             data:{
-                  message:"vue_app",
-                  text:"this is text"
+                  message:"Hello login",
+                  text:"this is login"
             }
       });
 
-      var header = new Vue({
-            delimiters:['[[',']]'],
-            el:"#app2",
-            data:{
-                  title:"app2"
-            }
-      })
+      
 </script>
 </html>
