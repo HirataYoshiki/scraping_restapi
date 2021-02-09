@@ -10,9 +10,10 @@ from controls import Control
 
 import hashlib
 import datetime
+import os
 
 router = APIRouter()
-templates = Jinja2Templates(directory="../frontend/templates")
+templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__),"../frontend/templates"))
 
 @router.get('/',response_class=HTMLResponse)
 async def api_schemas(request:Request):
