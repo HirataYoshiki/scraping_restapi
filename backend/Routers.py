@@ -11,13 +11,14 @@ from controls import Control
 import hashlib
 import datetime
 import os
+import json
 
 router = APIRouter()
 templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__),"../frontend/templates"))
 
 @router.get('/',response_class=HTMLResponse)
 async def api_schemas(request:Request):
-    """
+    
     result = {
         '/':{'get':'api_schemas',
             '/users':{
@@ -39,20 +40,21 @@ async def api_schemas(request:Request):
             }
         }
     }
-    return result"""
-    return templates.TemplateResponse("index.html",{"request":request,"text":"hi"})
+    
+    return templates.TemplateResponse("index.html",{"request":request,"text":json.dumps(result,indent = 2)})
 
 @router.get('/login',response_class=HTMLResponse)
 async def api_schemas(request:Request):
-    return templates.TemplateResponse("login.html",{"request":request,"text":"login"})
+    return templates.TemplateResponse("index.html",{"request":request,"text":"login"})
 
 
 class RouterUsers:
-    @router.get('/users')
-    async def get_all_users():
+    @router.get('/users',response_class=HTMLResponse)
+    async def get_all_users(request:Request):
         session = Model.get_session()
         query = session.query(Model.User).all()
-        return query
+        #return query
+        return templates.TemplateResponse("index.html",{"request":request,"text":query})
 
     @router.post('/users')
     async def add_new_user(user:Scheme.User):

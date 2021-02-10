@@ -1,43 +1,21 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-      <meta charset="UTF-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title id = "app2">[[title]]</title>
-</head>
-<body>
-      <div id = "app">
-            [[message]]
-            <br>
-            [[text]]
-            <br>
-            <p>from fastapi</p>
-            {{text}}
-            <a class = "navbar-brand" href = "/">For first</a>
-            <a class = "navbar-brand" href = "/login">For test</a>
-      </div>
-      
-</body>
-
-
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
-<script>
-      var app = new Vue({
-            delimiters:['[[',']]'],
-            el:"#app",
-            data:{
-                  message:"vue_app",
-                  text:"this is text"
-            }
-      });
-
-      var header = new Vue({
-            delimiters:['[[',']]'],
-            el:"#app2",
-            data:{
-                  title:"app2"
-            }
-      })
-</script>
-</html>
+{% extends "base.html" %}
+{%block body %}
+<div id = "index">
+      [[message]]
+      <br>
+      [[text]]
+      <br>
+      {{text}}
+      <br>
+      <button type="button" class="btn btn-primary"  onclick="location.href = '/'">For first</button>
+      <button type="button" class="btn btn-primary" onclick="location.href = '/login'">For test</button>
+      <form>
+            <div class="form-group row">
+                  <label for="inputPassword" class="col-lg-2 col-form-label">[[placeholder]]</label>
+                  <div class="col-sm-10">
+                        <input class="form-control" id="inputPassword" v-bind:placeholder="placeholder">
+                  </div>
+            </div>
+      </form>
+</div>
+{% endblock %}

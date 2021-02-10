@@ -1,36 +1,13 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-      <meta charset="UTF-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title id = title>[[title]]</title>
-</head>
-<body>
-      <div id = app>
-            [[message]]
-            [[text]]
-            {{text}}
-      </div>
-</body>
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
-<script>
-      var header = new Vue({
-            delimiters:['[[',']]'],
-            el:"title",
-            data:{
-                  title:"login"
-            }
-      })
-      var app = new Vue({
-            delimiters:['[[',']]'],
-            el:"#app",
-            data:{
-                  message:"Hello login",
-                  text:"this is login"
-            }
-      });
-
-      
-</script>
-</html>
+{% extends "base.html" %}
+{%block body %}
+<div id = "app2">
+      [[message]]
+      <br>
+      [[text]]
+      <br>
+      {{text}}
+      <br>
+      <button type="button" class="btn btn-primary"  onclick="location.href = '/'">For first</button>
+      <button type="button" class="btn btn-primary" onclick="location.href = '/login'">For test</button>
+</div>
+{% endblock %}
