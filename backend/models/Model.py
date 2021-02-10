@@ -5,7 +5,6 @@ from sqlalchemy import Boolean, Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-
 url = os.path.join(os.path.dirname(__file__),"test.db") 
 DB_URL = f'sqlite:///{url}'
 
@@ -39,6 +38,7 @@ class User(Base):
     password = Column(String)
     premium = Column(Boolean,default = False)
     __tablename__ = "users"
+
 
 
 if __name__ == "__main__":

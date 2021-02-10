@@ -11,7 +11,6 @@ from controls import Control
 import hashlib
 import datetime
 import os
-import json
 
 router = APIRouter()
 templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__),"../frontend/templates"))
@@ -41,11 +40,11 @@ async def api_schemas(request:Request):
         }
     }
     
-    return templates.TemplateResponse("index.html",{"request":request,"text":json.dumps(result,indent = 2)})
+    return templates.TemplateResponse("index.html",{"request":request,"data":"basics"})
 
 @router.get('/login',response_class=HTMLResponse)
 async def api_schemas(request:Request):
-    return templates.TemplateResponse("index.html",{"request":request,"text":"login"})
+    return templates.TemplateResponse("index.html",{"request":request,"data":"login"})
 
 
 class RouterUsers:
@@ -54,7 +53,7 @@ class RouterUsers:
         session = Model.get_session()
         query = session.query(Model.User).all()
         #return query
-        return templates.TemplateResponse("index.html",{"request":request,"text":query})
+        return templates.TemplateResponse("index.html",{"request":request,"data":"users"})
 
     @router.post('/users')
     async def add_new_user(user:Scheme.User):
