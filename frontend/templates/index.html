@@ -1,22 +1,21 @@
-{% extends "base.html" %}
-{%block body %}
-<div id = "index">
-      [[{{data}}.message]]
-      <br>
-      [[{{data}}.text]]
-      <br>
-      {{data}}
-      <br>
-      <button type="button" class="btn btn-primary"  onclick="location.href = '/'">basic</button>
-      <button type="button" class="btn btn-primary" onclick="location.href = '/users'">users</button>
-      <button type="button" class="btn btn-primary" onclick="location.href = '/login'">login</button>
-      <form>
-            <div class="form-group row">
-                  <label for="inputPassword" class="col-lg-2 col-form-label">[[{{data}}.placeholder]]</label>
-                  <div class="col-sm-10">
-                        <input class="form-control" id="inputPassword" v-bind:placeholder="placeholder">
-                  </div>
+{% extends "base.html"%}
+{%block body%}
+[[master.message]]
+<br>
+[[master.text]]
+<br>
+{{data}}
+{{contents}}
+<br>
+<button type="button" class="btn btn-primary" onclick="location.href = '/'">basic</button>
+<button type="button" class="btn btn-primary" onclick="location.href = '/users'">users</button>
+<button type="button" class="btn btn-primary" onclick="location.href = '/login'">login</button>
+<form>
+      <div class="form-group row">
+            <label for="inputPassword" class="col-lg-2 col-form-label">[[master.name]]</label>
+            <div class="col-sm-10">
+                  <input class="form-control" id="inputPassword" v-bind:placeholder="master.name">
             </div>
-      </form>
-</div>
-{% endblock %}
+      </div>
+</form>
+{% endblock%}

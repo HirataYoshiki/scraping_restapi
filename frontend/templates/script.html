@@ -1,36 +1,47 @@
 <script>
-      var header = new Vue({
+      window.onload=function(){
+      var vm = new Vue({
             delimiters:['[[',']]'],
-            el:"#headers",
+            el:"#app",
             data:{
                   Navbar:"navbar",
-                  Nav1:"home",
-                  Nav2:"users",
-                  Nav3:"login"
-            }
-      })
-
-      var index = new Vue({
-            delimiters:['[[',']]'],
-            el:"#index",
-            data:{
-                  "users":{
-                        message:"this is Users",
-                        text:"this is Users-text",
-                        placeholder:"username"
+                  master:{
+                        name:"",
+                        text1:"",
+                        text2:""
                   },
-                  "basics":{
-                        message:"this is Basic",
-                        text:"this is Basic-text",
-                        placeholder:"basic"
-                  },
-                  "login":{
-                        message:"this is Login",
-                        text:"this is Login-text",
-                        placeholder:"login"
+                  templates:[
+                        {
+                              name:"Home",
+                              text1:"This is Home",
+                              text2:"chill"
+                        },
+                        {
+                              name:"Users",
+                              text1:"This is Users",
+                              text2:"yamm"
+                        },
+                        {
+                              name:"Login",
+                              text1:"This is login",
+                              text2:"yaha"
+                        }
+                  ]
+            },
+            methods:{
+                  change_master:function (name){
+                        for(var i in this.templates){
+                              d = this.templates[i]
+                              if(d.name==name){
+                                    this.master.name=d.name
+                                    this.master.text1=d.text1
+                                    this.master.text2=d.text2
+                              }
+                        }
                   }
-                  
             }
       })
-      ;
+      $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            vm.change_master(e.target.name)})
+      }
 </script>

@@ -15,6 +15,7 @@ import os
 router = APIRouter()
 templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__),"../frontend/templates"))
 
+#entry point to HomePage
 @router.get('/',response_class=HTMLResponse)
 async def api_schemas(request:Request):
     
@@ -40,20 +41,19 @@ async def api_schemas(request:Request):
         }
     }
     
-    return templates.TemplateResponse("index.html",{"request":request,"data":"basics"})
+    return templates.TemplateResponse("index.html",{"request":request,"data":"basics","contents":result})
 
 @router.get('/login',response_class=HTMLResponse)
 async def api_schemas(request:Request):
-    return templates.TemplateResponse("index.html",{"request":request,"data":"login"})
+    return templates.TemplateResponse("base.html",{"request":request,"data":"login","contents":"true"})
 
 
 class RouterUsers:
-    @router.get('/users',response_class=HTMLResponse)
-    async def get_all_users(request:Request):
+    @router.get('/users')
+    async def get_all_users():
         session = Model.get_session()
         query = session.query(Model.User).all()
-        #return query
-        return templates.TemplateResponse("index.html",{"request":request,"data":"users"})
+        return {"items":query}
 
     @router.post('/users')
     async def add_new_user(user:Scheme.User):
@@ -72,8 +72,7 @@ class RouterUsers:
             print("ロールバック")
 
         return {
-            "items":session.query(Model.User).filter(Model.User.name == name).all(),
-            "condition":True
+            "items":session.query(Model.User).filter(Model.User.name == name).all()
             }
 
     @router.get('/users/{userid}')
@@ -82,7 +81,7 @@ class RouterUsers:
         session = Model.get_session()
         result = session.query(Model.User).filter(Model.User.userid == userid).one()
         return {
-            "items":result
+            "items":[result]
             }
 
     @router.put('/users/{userid}')
@@ -145,9 +144,11 @@ class RoutersActivity:
             session.rollback()
             print("ロールバック")
         return {
-            "url":url,
-            "tags":tags,
-            "result":items
+            "items":[{
+                "url":url,
+                "tags":tags,
+                "result":items
+                }]
             }
 
     @router.get('/activities')
@@ -169,9 +170,9 @@ class RoutersActivity:
             session.rollback()
             print("ロールバック")
         return {
-            "result":{
+            "items":[{
                 "delete id":activityid
-                }
+                }]
             }
 
 

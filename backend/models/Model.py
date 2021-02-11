@@ -1,5 +1,7 @@
 #データベース設計とその操作に関するファイル
 import os
+import json 
+
 import sqlalchemy
 from sqlalchemy import Boolean, Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
@@ -32,14 +34,13 @@ class Activity(Base):
     items = Column(String)
     __tablename__ = "activities"
 
+
 class User(Base):
     userid = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     password = Column(String)
     premium = Column(Boolean,default = False)
     __tablename__ = "users"
-
-
 
 if __name__ == "__main__":
     Base.metadata.create_all(bind=engine)
