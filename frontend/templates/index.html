@@ -1,15 +1,10 @@
 {% extends "base.html"%}
 {%block body%}
-[[master.message]]
-<br>
-[[master.text]]
-<br>
-{{data}}
-{{contents}}
-<br>
-<button type="button" class="btn btn-primary" onclick="location.href = '/'">basic</button>
-<button type="button" class="btn btn-primary" onclick="location.href = '/users'">users</button>
-<button type="button" class="btn btn-primary" onclick="location.href = '/login'">login</button>
+<button type="button" class="btn btn-primary" v-on:click="get_json_data('/')">basic</button>
+<button type="button" class="btn btn-primary" v-on:click="get_json_data('/users')">users</button>
+<button type="button" class="btn btn-primary" v-on:click="get_json_data('/login')">login</button>
+<button type="button" class="btn btn-primary" v-on:click="get_json_data('/activities')">activities</button>
+
 <form>
       <div class="form-group row">
             <label for="inputPassword" class="col-lg-2 col-form-label">[[master.name]]</label>
@@ -18,4 +13,11 @@
             </div>
       </div>
 </form>
+
+[[master.message]]
+<br>
+[[master.text]]
+<br>
+[[master.getdata]]
+<br>
 {% endblock%}

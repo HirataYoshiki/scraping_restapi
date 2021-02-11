@@ -8,7 +8,9 @@
                   master:{
                         name:"",
                         text1:"",
-                        text2:""
+                        text2:"",
+                        getdata:"",
+                        postdata:""
                   },
                   templates:[
                         {
@@ -38,6 +40,14 @@
                                     this.master.text2=d.text2
                               }
                         }
+                  },
+                  get_json_data:async function(url){
+                        const response = await axios.get(url)
+                        this.master.getdata=response.data
+                  },
+                  request_json_data:async function(url,data){
+                        const response = await axios.post(url,data)
+                        this.master.postdata=response.data
                   }
             }
       })

@@ -43,9 +43,9 @@ async def api_schemas(request:Request):
     
     return templates.TemplateResponse("index.html",{"request":request,"data":"basics","contents":result})
 
-@router.get('/login',response_class=HTMLResponse)
-async def api_schemas(request:Request):
-    return templates.TemplateResponse("base.html",{"request":request,"data":"login","contents":"true"})
+@router.get('/login')
+async def api_schemas():
+    return {"items":[{"name":"login"}]}
 
 
 class RouterUsers:
