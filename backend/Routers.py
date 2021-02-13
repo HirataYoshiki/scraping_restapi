@@ -1,5 +1,6 @@
 #ルーターに対するレスポンスに関するファイル
-from fastapi import APIRouter,Request ,Response, Header
+from fastapi import APIRouter,Request ,Response, Header,Depends
+from fastapi.security import OAuth2PasswordBearer
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
@@ -17,9 +18,13 @@ import os
 router = APIRouter()
 templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__),"../frontend/templates"))
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+
+
 #entry point to HomePage
 @router.get('/',response_class=HTMLResponse)
-async def api_schemas(request:Request,responce:Response):
+async def api_schemas(request:Request,responce:Response,token: str = Depends(oauth2_scheme)):
     result = {
             '/':{'get':'api_schemas',
                 '/users':{
@@ -41,7 +46,14 @@ async def api_schemas(request:Request,responce:Response):
                 }
             }
         }
-    return templates.TemplateResponse("index.html",{"request":request,"data":"basics","contents":responce.headers.get("Cookie","Hello,no Cookie Found")})
+    return templates.TemplateResponse(
+        "index.html",
+        {
+            "request":request,
+            "data":"basics",
+            "contents":token
+            }
+        )
 
 @router.get('/login')
 async def api_schemas(responce:Response,user_agent: Optional[str] = Header(None)):
