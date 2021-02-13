@@ -22,23 +22,23 @@ class Scraping:
     #       result = {"tag":{"htmltag.name":[text1,text2,...]}} 
 
     @classmethod
-    def get_results(cls,url:str,tags:list):     
+    def get_results(cls,url:str,SearchTags:list):     
 
-        if not cls._check_tag_url(url,tags):  
+        if not cls._check_tag_url(url,SearchTags):  
             return "url or tag is invalid."
 
         res = requests.get(url)
         res.encoding = res.apparent_encoding
         soup = bs(res.text,'html.parser')
         htmltags = cls._get_html_tags(soup)
-        itemlist = cls._match_tag_alltext(soup,tags,htmltags)
+        itemlist = cls._match_tag_alltext(soup,SearchTags,htmltags)
         return itemlist
 
 
-    def _check_tag_url(url,tags) -> bool:
+    def _check_tag_url(url,SearchTags) -> bool:
         Number = 1
 
-        if url == "" or tags == "":
+        if url == "" or SearchTags == "":
             return False
         else:
             return True
@@ -53,34 +53,35 @@ class Scraping:
         tagslist = list(dict.fromkeys(tagslist_raw))
         return tagslist
 
-    def _match_tag_alltext(soup,SearchTags:list,HtmlTags:list) -> dict:
+    def _match_tag_alltext(soup,SearchTags:list,HtmlTags:list) -> list:
         Number = 3
 
-        result = {}
+        #finally return 
+        #[{"SearchTag":searchtag,"texts":[text,...,],{"Sear.."}]
+        #then vue.js can get return.Searchtag.text for return in returns for text in return.texts
+        items=[]
+        minisoups=[]
+        # make souplist according to item in HtmlTags
         for htmltag in HtmlTags:
-            minisoup = soup.findAll(htmltag)
-            for minimumsoup in minisoup:
-                try:
-                    for searchtag in SearchTags:
-                        text = minimumsoup.text
+            minisoup=soup.findAll(htmltag)
+            minisoups.append(minisoup)
+
+        for searchtag in SearchTags:
+            result = {}
+            for minisoup in minisoups:
+                for minimumsoup in minisoup:
+                    text = minimumsoup.text
+                    try:
                         m = re.search(searchtag,text)
-                        if m !=None:
-                            if result.get(searchtag,False):
-                                if result[searchtag].get(htmltag,False):
-                                    result[searchtag][htmltag].append(text)
-                                else:
-                                    result[searchtag][htmltag] = [text]
+                        if m!=None:
+                            if result.get("SearchTag"):
+                                result["texts"].append(text)
                             else:
-                                result[searchtag] = {htmltag:[text]}
-                except:
-                    continue
+                                result["SearchTag"]=searchtag
+                                result["texts"]=[text]
+                    except:
+                        continue
 
-        return result
+            items.append(result)
 
-
-
-
-
-
-
-
+        return items
