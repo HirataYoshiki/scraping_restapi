@@ -1,8 +1,10 @@
 #ルーターに対するレスポンスに関するファイル
-from fastapi import APIRouter,Request 
+from fastapi import APIRouter,Request ,Response, Header
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
+
+from typing import List,Optional
 
 from schemes import Scheme
 from models import Model
@@ -17,34 +19,33 @@ templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__),"..
 
 #entry point to HomePage
 @router.get('/',response_class=HTMLResponse)
-async def api_schemas(request:Request):
-    
+async def api_schemas(request:Request,responce:Response):
     result = {
-        '/':{'get':'api_schemas',
-            '/users':{
-                'get':"get all data about users",
-                'post':"register new user with username,password",
-                'put':"",
-                '/{userid}':{
-                    "get":"get info about the user",
-                    "put":"change info about the user",
-                    'delete':"delete the user"
-                }
-            },
-            '/activities':{
-                'get':"get all info about activities",
-                '/{activityid}':{
-                    'get':"get info about the activity",
-                    'delete':""
+            '/':{'get':'api_schemas',
+                '/users':{
+                    'get':"get all data about users",
+                    'post':"register new user with username,password",
+                    'put':"",
+                    '/{userid}':{
+                        "get":"get info about the user",
+                        "put":"change info about the user",
+                        'delete':"delete the user"
+                    }
+                },
+                '/activities':{
+                    'get':"get all info about activities",
+                    '/{activityid}':{
+                        'get':"get info about the activity",
+                        'delete':""
+                    }
                 }
             }
         }
-    }
-    
-    return templates.TemplateResponse("index.html",{"request":request,"data":"basics","contents":result})
+    return templates.TemplateResponse("index.html",{"request":request,"data":"basics","contents":responce.headers.get("Cookie","Hello,no Cookie Found")})
 
 @router.get('/login')
-async def api_schemas():
+async def api_schemas(responce:Response,user_agent: Optional[str] = Header(None)):
+    print(user_agent)
     return {"items":[{"name":"login"}]}
 
 
