@@ -10,11 +10,13 @@ from typing import List,Optional
 from schemes import Scheme
 from models import Model
 from controls import Control
-from autholization import Auth 
+from autholization.Auth import Autholization
+Auth = Autholization()
 
 import hashlib
 import datetime
 import os
+from datetime import datetime, timedelta
 
 router = APIRouter()
 templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__),"../frontend/templates"))
@@ -87,11 +89,11 @@ class RouterUsers:
             print("ロールバック")
 
         return {
-            "items":session.query(Model.User).filter(Model.User.name == name).all()
+            "items":session.query(Model.User).filter(Model.User.name == name).one()
             }
 
     @router.get("/users/me/", response_model=Scheme.User)
-    async def read_users_me(current_user: Scheme.User = Depends(Auth.Autholization.get_current_active_user)):
+    async def read_users_me(current_user: Scheme.User = Depends(Auth.get_current_active_user)):
         return current_user
 
     @router.put('/users/{userid}')
@@ -100,6 +102,7 @@ class RouterUsers:
         user:Scheme.User):
         session = Model.get_session()
         updates = session.query(Model.User).filter(Model.User.userid==userid).one()
+        print(updates)
         if user.username:
             updates.name = user.username
         if user.premium:
@@ -189,16 +192,16 @@ class OAuth_Token:
     @router.post("/token", response_model=Scheme.Token)
     async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
         session = Model.get_session()
-        user = Auth.Autholization.authenticate_user(session, form_data.username, form_data.password)
+        user = Auth.authenticate_user(session, form_data.username, form_data.password)
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Incorrect username or password",
                 headers={"WWW-Authenticate": "Bearer"},
             )
-        access_token_expires = timedelta(minutes=Autolization.ACCESS_TOKEN_EXPIRE_MINUTES)
-        access_token = create_access_token(
-            data={"sub": user.username}, expires_delta=access_token_expires
+        access_token_expires = timedelta(minutes=Auth.ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = Auth.create_access_token(
+            user_data={"sub": user.name}, expires_delta=access_token_expires
         )
         return {"access_token": access_token, "token_type": "bearer"}
 
