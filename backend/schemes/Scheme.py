@@ -1,6 +1,6 @@
 #RestAPIの入力設計に関するファイル
 from pydantic import BaseModel
-from typing import List
+from typing import List,Optional
 
 
 class Activity(BaseModel):
@@ -10,4 +10,11 @@ class Activity(BaseModel):
 class User(BaseModel):
     username: str = "Enter Your Name"
     password: str = "Enter The Password"
-    premium:bool = False
+    premium:Optional[bool] = None
+
+class Token(BaseModel):
+    access_token:str
+    token_type:str
+
+class TokenData(BaseModel):
+    username:Optional[str]=None

@@ -1,6 +1,6 @@
 #ルーターに対するレスポンスに関するファイル
-from fastapi import APIRouter,Request ,Response, Header,Depends
-from fastapi.security import OAuth2PasswordBearer
+from fastapi import APIRouter,Request ,Response, Header,Depends,HTTPException,status
+from fastapi.security import OAuth2PasswordBearer,OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
@@ -10,6 +10,7 @@ from typing import List,Optional
 from schemes import Scheme
 from models import Model
 from controls import Control
+from autholization import Auth 
 
 import hashlib
 import datetime
@@ -75,7 +76,8 @@ class RouterUsers:
         password = hashlib.sha256(user.password.encode()).hexdigest()
         adds = Model.User(
             name = name,
-            password = password
+            password = password,
+            premium = user.premium
             )
         session.add(adds)
         try:
@@ -88,14 +90,9 @@ class RouterUsers:
             "items":session.query(Model.User).filter(Model.User.name == name).all()
             }
 
-    @router.get('/users/{userid}')
-    async def get_user(
-        userid:int):
-        session = Model.get_session()
-        result = session.query(Model.User).filter(Model.User.userid == userid).one()
-        return {
-            "items":[result]
-            }
+    @router.get("/users/me/", response_model=Scheme.User)
+    async def read_users_me(current_user: Scheme.User = Depends(Auth.Autholization.get_current_active_user)):
+        return current_user
 
     @router.put('/users/{userid}')
     async def update_user(
@@ -188,5 +185,21 @@ class RoutersActivity:
                 }]
             }
 
+class OAuth_Token:
+    @router.post("/token", response_model=Scheme.Token)
+    async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+        session = Model.get_session()
+        user = Auth.Autholization.authenticate_user(session, form_data.username, form_data.password)
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Incorrect username or password",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        access_token_expires = timedelta(minutes=Autolization.ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={"sub": user.username}, expires_delta=access_token_expires
+        )
+        return {"access_token": access_token, "token_type": "bearer"}
 
 

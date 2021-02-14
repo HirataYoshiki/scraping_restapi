@@ -12,6 +12,9 @@ pydantic = "*"
 requests = "*"
 jinja2 = "*"
 aiofiles = "*"
+python-jose = "*"
+passlib = "*"
+python-multipart = "*"
 
 [dev-packages]
 coverage = "*"
