@@ -11,6 +11,7 @@ from schemes import Scheme
 from models import Model
 from controls import Control
 from autholization import Auth
+import config
 
 import hashlib
 import datetime
@@ -197,7 +198,7 @@ class OAuth_Token:
                 detail="Incorrect username or password",
                 headers={"WWW-Authenticate": "Bearer"},
             )
-        access_token_expires = timedelta(minutes=Auth.ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token_expires = timedelta(minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = Auth.create_access_token(
             user_data={"sub": user.name}, expires_delta=access_token_expires
         )
