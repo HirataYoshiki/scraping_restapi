@@ -10,8 +10,7 @@ from typing import List,Optional
 from schemes import Scheme
 from models import Model
 from controls import Control
-from autholization.Auth import Autholization
-Auth = Autholization()
+from autholization import Auth
 
 import hashlib
 import datetime
@@ -92,7 +91,7 @@ class RouterUsers:
             "items":session.query(Model.User).filter(Model.User.name == name).one()
             }
 
-    @router.get("/users/me/", response_model=Scheme.User)
+    @router.get("/users/me/")#response_model=Scheme.UserOut
     async def read_users_me(current_user: Scheme.User = Depends(Auth.get_current_active_user)):
         return current_user
 
@@ -134,7 +133,7 @@ class RouterUsers:
 
 class RoutersActivity:
     @router.post('/activities')
-    async def post_activity(activities:Scheme.Activity):
+    async def post_activity(activities:Scheme.Activity,current_user: Scheme.UserOut = Depends(Auth.get_current_active_user)):
         session = Model.get_session()
         url = activities.url
         tags = activities.tags
@@ -142,11 +141,10 @@ class RoutersActivity:
             "url":url,
             "tags":tags
             }
-        
         items = Control.Scraping.get_results(url,tags)
         adds = Model.Activity(
-            userid = 111,
-            timestamp = datetime.datetime.now(),
+            userid = current_user.userid,
+            timestamp = datetime.now(),
             action = str(action),
             items = str(items)
         )
