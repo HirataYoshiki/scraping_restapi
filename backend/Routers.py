@@ -21,13 +21,11 @@ from datetime import datetime, timedelta
 router = APIRouter()
 templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__),"../frontend/templates"))
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
 
 
 #entry point to HomePage
 @router.get('/',response_class=HTMLResponse)
-async def api_schemas(request:Request,responce:Response,token: str = Depends(oauth2_scheme)):
+async def api_schemas(request:Request,responce:Response,token: str = Depends(config.OAUTH2_SCHEME)):
     result = {
             '/':{'get':'api_schemas',
                 '/users':{
@@ -59,9 +57,8 @@ async def api_schemas(request:Request,responce:Response,token: str = Depends(oau
         )
 
 @router.get('/login')
-async def api_schemas(responce:Response,user_agent: Optional[str] = Header(None)):
-    print(user_agent)
-    return {"items":[{"name":"login"}]}
+async def login(current_user: Scheme.User = Depends(Auth.get_current_user)):
+    return {"you":"logged in"}
 
 
 class RouterUsers:
@@ -77,7 +74,7 @@ class RouterUsers:
         name = user.username
         password = hashlib.sha256(user.password.encode()).hexdigest()
         adds = Model.User(
-            name = name,
+            username = name,
             password = password,
             premium = user.premium
             )
@@ -89,11 +86,11 @@ class RouterUsers:
             print("ロールバック")
 
         return {
-            "items":session.query(Model.User).filter(Model.User.name == name).one()
+            "items":session.query(Model.User).filter(Model.User.username == name).one()
             }
 
-    @router.get("/users/me/")#response_model=Scheme.UserOut
-    async def read_users_me(current_user: Scheme.User = Depends(Auth.get_current_active_user)):
+    @router.get("/users/me/")
+    async def read_users_me(current_user: Scheme.User = Depends(Auth.get_current_user)):
         return current_user
 
     @router.put('/users/{userid}')
@@ -164,9 +161,9 @@ class RoutersActivity:
             }
 
     @router.get('/activities')
-    async def get_all_activities():
+    async def get_all_activities(current_user: Scheme.UserOut = Depends(Auth.get_current_active_user)):
         session = Model.get_session()
-        query = session.query(Model.Activity).all()
+        query = session.query(Model.Activity).filter(Model.Activity.userid==current_user.userid).all()
         return {
             "result":query
         }
@@ -200,7 +197,7 @@ class OAuth_Token:
             )
         access_token_expires = timedelta(minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = Auth.create_access_token(
-            user_data={"sub": user.name}, expires_delta=access_token_expires
+            user_data={"sub": user.username}, expires_delta=access_token_expires
         )
         return {"access_token": access_token, "token_type": "bearer"}
 

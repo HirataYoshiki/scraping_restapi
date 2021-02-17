@@ -12,11 +12,11 @@ class User(BaseModel):
     password: str = "Enter The Password"
     premium:Optional[bool] = None
 
-class UserOut(BaseModel):
+class UserOut(User):
     userid:int
-    username:str
-    password:str
-    premium:str
+    username:Optional[str]
+    password:Optional[str]
+    premium:Optional[bool]= None
 
 
 class Token(BaseModel):

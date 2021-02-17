@@ -10,24 +10,24 @@ from schemes.Scheme import Token,TokenData,UserOut
 import config
 """
 [Autholization]
-      in this file, I'll make OAuth 2.0 autholization.
+      in this file, I'll make OAuth2.0 autholization.
       if other FrontEnd Engeneer want to use my API server, they have to send request to get access token.
 
       [request flow]
       1. Post (username,password) to /token
-      2. Check if username and password
-          .case1 if not user , return HttpException400
-          .case2 if not password, return HttpException400
+      2. Check if username and password is in DB
+          .case1 if not user in DB, return HttpException400
+          .case2 if not password in DB, return HttpException400
       3. Authentificate complete return token
       now everyone in DataBase:User can use API
       and next I'll check if the user is premium or not
-      3. Check if premium status is active or not
+      4. Check if premium status is active or not
           .case1 if not active, return HttpException401
           .case2 if active, continue 
 """
 
 
-def verify_password(plain_password, hashed_password):
+def verify_password(plain_password, hashed_password)->bool:
       if hashlib.sha256(plain_password.encode()).hexdigest()==hashed_password:
             return True
       else:
@@ -41,14 +41,14 @@ def get_password_hash(password):
 
 def get_user(session, username: str):
       try:
-            user_data = session.query(User).filter(User.name==username).one()
+            user_data = session.query(User).filter(User.username==username).one()
             return user_data
       except:
             return False
 
 
 def authenticate_user(session, username: str, password: str):
-      user_data = session.query(User).filter(User.name==username).one()
+      user_data = session.query(User).filter(User.username==username).one()
       if not user_data:
             return False
       if not verify_password(password, user_data.password):
@@ -56,7 +56,7 @@ def authenticate_user(session, username: str, password: str):
       return user_data
 
 
-def create_access_token(user_data, expires_delta: Optional[timedelta] = None):
+def create_access_token(user_data:dict, expires_delta: Optional[timedelta] = None):
       to_encode = user_data.copy()
       if expires_delta:
             expire = datetime.utcnow() + expires_delta
@@ -89,3 +89,6 @@ async def get_current_active_user(current_user: User = Depends(get_current_user)
       if not current_user.premium:
             raise HTTPException(status_code=400, detail="Inactive user")
       return current_user
+
+
+

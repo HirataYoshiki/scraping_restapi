@@ -37,7 +37,7 @@ class Activity(Base):
 
 class User(Base):
     userid = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
+    username = Column(String)
     password = Column(String)
     premium = Column(Boolean,default = False)
     __tablename__ = "users"
