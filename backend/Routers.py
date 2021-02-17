@@ -25,7 +25,7 @@ templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__),"..
 
 #entry point to HomePage
 @router.get('/',response_class=HTMLResponse)
-async def api_schemas(request:Request,responce:Response,token: str = Depends(config.OAUTH2_SCHEME)):
+async def api_schemas(request:Request,responce:Response):
     result = {
             '/':{'get':'api_schemas',
                 '/users':{
@@ -51,8 +51,7 @@ async def api_schemas(request:Request,responce:Response,token: str = Depends(con
         "index.html",
         {
             "request":request,
-            "data":"basics",
-            "contents":token
+            "data":"basics"
             }
         )
 

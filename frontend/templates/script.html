@@ -10,7 +10,8 @@
                         text1:"",
                         text2:"",
                         getdata:"",
-                        postdata:""
+                        postdata:"",
+                        accesstoken:""
                   },
                   templates:[
                         {
@@ -41,13 +42,19 @@
                               }
                         }
                   },
-                  get_json_data:async function(url){
-                        const response = await axios.get(url)
-                        this.master.getdata=response.data
+                  get_accesstoken: function (){
+                        //this.master.accesstoken=document.getElementById("accesstoken").textContent
+                        console.log("this.master.accesstoken")
                   },
-                  request_json_data:async function(url,data){
-                        const response = await axios.post(url,data)
-                        this.master.postdata=response.data
+                  get_json_data: async function(url){
+                        const response = await axios.get(url,{
+                              headers:{
+                                    Authorization: "OAuth " + vm.master.accesstoken
+                              }
+                              
+                        }).then(
+                        this.master.getdata=response.data
+                        )
                   }
             }
       })

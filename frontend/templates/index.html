@@ -1,18 +1,24 @@
 {% extends "base.html"%}
-{%block body%}
+{% block body %}
 <button type="button" class="btn btn-primary" v-on:click="get_json_data('/')">basic</button>
-<button type="button" class="btn btn-primary" v-on:click="get_json_data('/users')">users</button>
+<button type="button" class="btn btn-primary" v-on:click="get_json_data('/users/me')">me</button>
 <button type="button" class="btn btn-primary" v-on:click="get_json_data('/login')">login</button>
-<button type="button" class="btn btn-primary" v-on:click="get_json_data('/activities')">activities</button>
+<button type="button" class="btn btn-primary" v-on:click="get_accesstoken()">activities</button>
 
-<form>
-      <div class="form-group row">
-            <label for="inputPassword" class="col-lg-2 col-form-label">[[master.name]]</label>
-            <div class="col-sm-10">
-                  <input class="form-control" id="inputPassword" v-bind:placeholder="master.name">
+      <form target="AT">
+            <div class="form-group row">
+                  <label for="inputPassword" class="col-lg-2 col-form-label">[[master.name]]</label>
+                  <div class="col-sm-10">
+                        <input class="form-control" id="inputName" name="username" placeholder="Enter your Name">
+                  </div>
+                  <div class="col-sm-10">
+                        <input class="form-control" type="password" id="inputPassword" name= "password" placeholder="Enter password">
+                  </div>
             </div>
-      </div>
-</form>
+            <button type="submit" formmethod="post" formenctype="multipart/form-data" class="btn btn-primary" formaction="/token">Submit</button>
+            <iframe name="AT" id="accestoken"></iframe>
+      
+      </form>
 
 [[master.message]]
 <br>
