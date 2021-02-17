@@ -42,9 +42,13 @@
                               }
                         }
                   },
-                  get_accesstoken: function (){
-                        //this.master.accesstoken=document.getElementById("accesstoken").textContent
-                        console.log("this.master.accesstoken")
+                  get_accesstoken: async function (url){
+                        const formdata = new FormData()
+                        formdata.append('username',"test")
+                        formdata.append('password',"test")
+                        const response = await axios.post(url,formdata).then(
+                              this.master.accesstoken = response.access_token
+                        )
                   },
                   get_json_data: async function(url){
                         const response = await axios.get(url,{
