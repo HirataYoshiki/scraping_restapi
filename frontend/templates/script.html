@@ -6,12 +6,13 @@
             data:{
                   Navbar:"navbar",
                   master:{
-                        name:"",
-                        text1:"",
+                        name:"Home",
+                        text1:"Hello",
                         text2:"",
-                        getdata:"",
+                        sign: "Sing in",
+                        getdata:"get data",
                         postdata:"",
-                        accesstoken:""
+                        accesstoken:"accesstoken"
                   },
                   templates:[
                         {
@@ -28,6 +29,16 @@
                               name:"Login",
                               text1:"This is login",
                               text2:"yaha"
+                        },
+                        {
+                              name:"Play",
+                              text1:"Play this app",
+                              text2:"interesting"
+                        },
+                        {
+                              name:"History",
+                              text1:"All about your activity",
+                              text2:"interesting"
                         }
                   ]
             },
@@ -42,23 +53,22 @@
                               }
                         }
                   },
-                  get_accesstoken: async function (url){
-                        const formdata = new FormData()
-                        formdata.append('username',"test")
-                        formdata.append('password',"test")
-                        const response = await axios.post(url,formdata).then(
-                              this.master.accesstoken = response.access_token
-                        )
-                  },
                   get_json_data: async function(url){
-                        const response = await axios.get(url,{
-                              headers:{
-                                    Authorization: "OAuth " + vm.master.accesstoken
-                              }
-                              
-                        }).then(
+                        const response = await axios.get(url)
                         this.master.getdata=response.data
-                        )
+                        
+                  },
+                  send_request:async function(url){
+                        var token = document.getElementById('token').value
+                        this.master.getdata=" "+"Bearer "+token
+                        this.master.accesstoken="Bearer "+token
+                        const response=await axios.get(url,{
+                              headers:{
+                                    accept: "application/json",
+                                    Authorization: this.master.accesstoken
+                              }
+                        })
+                        this.master.getdata=response.data
                   }
             }
       })

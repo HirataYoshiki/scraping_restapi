@@ -88,7 +88,7 @@ class RouterUsers:
             "items":session.query(Model.User).filter(Model.User.username == name).one()
             }
 
-    @router.get("/users/me/")
+    @router.get("/users/me")
     async def read_users_me(current_user: Scheme.User = Depends(Auth.get_current_user)):
         return current_user
 

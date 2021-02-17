@@ -1,28 +1,25 @@
 {% extends "base.html"%}
 {% block body %}
-<button type="button" class="btn btn-primary" v-on:click="get_json_data('/')">basic</button>
-<button type="button" class="btn btn-primary" v-on:click="get_json_data('/users/me')">me</button>
-<button type="button" class="btn btn-primary" v-on:click="get_json_data('/login')">login</button>
-<button type="button" class="btn btn-primary" v-on:click="get_accesstoken('/token')">activities</button>
-
       <form target="AT">
             <div class="form-group row">
-                  <label for="inputPassword" class="col-lg-2 col-form-label">[[master.name]]</label>
                   <div class="col-sm-10">
-                        <input class="form-control" id="inputName" name="username" placeholder="Enter your Name">
+                        <label for="inputName" class="col-lg-2 col-form-label">Name</label><input class="form-control" id="inputName" name="username" placeholder="Enter your Name">
                   </div>
                   <div class="col-sm-10">
-                        <input class="form-control" type="password" id="inputPassword" name= "password" placeholder="Enter password">
+                        <label for="inputPassword" class="col-lg-2 col-form-label">Password</label><input class="form-control" type="password" id="inputPassword" name= "password" placeholder="Enter password">
                   </div>
             </div>
             <button type="submit" formmethod="post" formenctype="multipart/form-data" class="btn btn-primary" formaction="/token">Submit</button>
-            <iframe name="AT" id="accestoken"></iframe>
+            <iframe name="AT" id="acces" placeholder="accesstokens"></iframe>
+            
       
       </form>
-
+      <button v-on:click="send_request('/users/me')">me</button>
+      <button v-on:click="send_request('/activities')">activity</button>
+      <input id=token placeholder="enter accesstoken">token
 [[master.message]]
 <br>
-[[master.text]]
+[[master.accesstoken]]
 <br>
 [[master.getdata]]
 <br>

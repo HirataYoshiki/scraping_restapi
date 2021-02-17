@@ -1,14 +1,22 @@
-<nav>
-  <div class="nav nav-tabs" id="nav-tab" role="tablist">
-      <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" role="tab" aria-controls="nav-home" aria-selected="true" name="Home">Home</a>
-      <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab"  role="tab" aria-controls="nav-profile" aria-selected="false" name="Users">Users</a>
-      <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab"  role="tab" aria-controls="nav-contact" aria-selected="false" name = "Login">Login</a>
+<header>
+  <div class="card-header">
+    <div class="card text-center">
+      <ul class="nav nav-tabs card-header-tabs" display='flex'>
+        <li class="nav-item" display="inline">
+          <a class="nav-link" id='navi-home-tab' role="tab" data-toggle="tab" area-selected = "true" name='Home'>Home</a>
+        </li>
+        <li class="nav-item" display="inline">
+          <a class="nav-link" id='navi-play-tab' role="tab" data-toggle="tab" name='Play'>Play</a>
+        </li>
+        <li class="nav-item" display="inline">
+          <a class="nav-link" id='navi-history-tab' role="tab" data-toggle="tab" name='History'>History</a>
+        </li>
+        <li class="nav-item" display="inline">
+          <a class="nav-link" id='navi-history-tab' aline='left' name='Signin'>
+            <button type="button" class="btn btn-info" v-on:click="get_json_data('/users')">[[master.sign]]</button>
+        </a>
+        </li>
+      </ul>
+    </div> 
   </div>
-</nav>
-<div class="tab-content" id="nav-tabContent">
-  <div class="tab-pane show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-      <h1>[[master.text1]]</h1>
-      <h2>[[master.text2]]</h2>
-  </div>
-  
-</div>
+</header>
