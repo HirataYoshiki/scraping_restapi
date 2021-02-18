@@ -1,6 +1,6 @@
 {% extends "base.html"%}
 {% block body %}
-      <form target="AT">
+      <form>
             <div class="form-group row">
                   <div class="col-sm-10">
                         <label for="inputName" class="col-lg-2 col-form-label">Name</label><input class="form-control" id="inputName" name="username" placeholder="Enter your Name">
@@ -9,18 +9,20 @@
                         <label for="inputPassword" class="col-lg-2 col-form-label">Password</label><input class="form-control" type="password" id="inputPassword" name= "password" placeholder="Enter password">
                   </div>
             </div>
-            <button type="submit" formmethod="post" formenctype="multipart/form-data" class="btn btn-primary" formaction="/token">Submit</button>
-            <iframe name="AT" id="acces" placeholder="accesstokens"></iframe>
-            
-      
       </form>
+      <button  class="btn btn-primary" v-on:click="request_token" id= "manual_token_request" aria-placeholder="Manual_token_Request">Submit</button>
+
       <button v-on:click="send_request('/users/me')">me</button>
       <button v-on:click="send_request('/activities')">activity</button>
-      <input id=token placeholder="enter accesstoken">token
 [[master.message]]
 <br>
 [[master.accesstoken]]
 <br>
 [[master.getdata]]
 <br>
+[[master.name]]
+<br>
+[[master.text1]]
+<br>
+[[master.text2]]
 {% endblock%}

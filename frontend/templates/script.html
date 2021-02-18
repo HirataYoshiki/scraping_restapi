@@ -4,7 +4,6 @@
             delimiters:['[[',']]'],
             el:"#app",
             data:{
-                  Navbar:"navbar",
                   master:{
                         name:"Home",
                         text1:"Hello",
@@ -59,16 +58,24 @@
                         
                   },
                   send_request:async function(url){
-                        var token = document.getElementById('token').value
-                        this.master.getdata=" "+"Bearer "+token
-                        this.master.accesstoken="Bearer "+token
                         const response=await axios.get(url,{
                               headers:{
                                     accept: "application/json",
-                                    Authorization: this.master.accesstoken
+                                    Authorization: "Bearer "+this.master.accesstoken
                               }
                         })
                         this.master.getdata=response.data
+                  },
+                  request_token:async function() {
+                        url = '/token'
+                        var formdata = new FormData()
+                        username =document.getElementById('inputName').value
+                        password = document.getElementById('inputPassword').value
+                        formdata.append("username",username)
+                        formdata.append("password",password)
+
+                        const response= await axios.post(url,formdata)
+                        this.master.accesstoken=response.data.access_token
                   }
             }
       })
