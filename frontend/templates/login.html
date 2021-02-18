@@ -1,13 +1,10 @@
 {% extends "base.html" %}
 {%block body %}
 <div id = "app2">
-      [[message]]
-      <br>
-      [[text]]
-      <br>
+      [[master.name]]
       {{text}}
       <br>
-      <button type="button" class="btn btn-primary"  onclick="location.href = '/'">For first</button>
+      <button type="button" class="btn btn-primary"  v-on:click="signin.request_token">Request token</button>
       <button type="button" class="btn btn-primary" onclick="location.href = '/login'">For test</button>
 </div>
 {% endblock %}

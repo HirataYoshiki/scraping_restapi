@@ -8,7 +8,7 @@
                         name:"Home",
                         text1:"Hello",
                         text2:"",
-                        sign: "Sing in",
+                        sign: "Sing up",
                         getdata:"get data",
                         postdata:"",
                         accesstoken:"accesstoken"
@@ -57,11 +57,21 @@
                         this.master.getdata=response.data
                         
                   },
+                  take_accesstoken_from_cookie:function(){
+                        var cookies = document.cookie.split(";")
+                        for (var cookie of cookies){
+                              var array = cookie.split("=")
+                              if (array[0]=="accesstoken"){
+                                    return array[1]
+                              }
+                        } 
+                  },
                   send_request:async function(url){
+                        var accesstoken=this.take_accesstoken_from_cookie()
                         const response=await axios.get(url,{
                               headers:{
                                     accept: "application/json",
-                                    Authorization: "Bearer "+this.master.accesstoken
+                                    Authorization: "Bearer " + accesstoken
                               }
                         })
                         this.master.getdata=response.data
@@ -69,13 +79,15 @@
                   request_token:async function() {
                         url = '/token'
                         var formdata = new FormData()
-                        username =document.getElementById('inputName').value
+                        username = document.getElementById('inputName').value
                         password = document.getElementById('inputPassword').value
                         formdata.append("username",username)
                         formdata.append("password",password)
 
                         const response= await axios.post(url,formdata)
                         this.master.accesstoken=response.data.access_token
+                        document.cookie = "accesstoken=; max-age=0";
+                        document.cookie='accesstoken=' + response.data.access_token + "; max-age=60"
                   }
             }
       })

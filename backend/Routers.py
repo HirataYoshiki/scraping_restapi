@@ -55,9 +55,15 @@ async def api_schemas(request:Request,responce:Response):
             }
         )
 
-@router.get('/login')
-async def login(current_user: Scheme.User = Depends(Auth.get_current_user)):
-    return {"you":"logged in"}
+@router.get('/login',response_class=HTMLResponse)
+async def login(request:Request):
+    return templates.TemplateResponse(
+        "login.html",
+        {   
+            "request":request,
+            "text":"Hello"
+            }
+        )
 
 
 class RouterUsers:
